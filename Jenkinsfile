@@ -9,7 +9,7 @@ pipeline {
         string(name: 'appVersion', defaultValue: '1.0.0', description: 'what is the application version')
     }
     environment {
-        def appVersion: '' //declaring global variable
+        def appVersion = '' //declaring global variable
         nexusUrl = 'nexus.devops76.sbs:8081'
     }
     stages {
