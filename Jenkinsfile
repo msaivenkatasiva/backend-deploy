@@ -8,7 +8,7 @@ pipeline {
         ansiColor('xterm')
     }
     parameters {
-        string(name: 'appVersion', defaultValue: '1.0.0', description: 'what is the application version')
+        string(name: 'appVersion', defaultValue: '1.0.0', description: 'what is the application version?')
     }
     environment {
         def appVersion = '' //declaring global variable
