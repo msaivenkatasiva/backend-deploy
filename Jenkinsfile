@@ -4,6 +4,8 @@ pipeline {
     }
     options {
         timeout(time: 30, unit: 'MINUTES')
+        disableConcurrentBuilds()
+        ansiColor('xterm')
     }
     parameters {
         string(name: 'appVersion', defaultValue: '1.0.0', description: 'what is the application version')
@@ -14,14 +16,39 @@ pipeline {
     }
     stages {
         stage('Print the version'){
-            steps {
-                script {
+            steps{
+                script{
                     // def packageJson = readJSON file: 'package.Json'
                     // appVersion = packageJSON.version 
-                    echo "application version: ${params.appVersion}"
+                    echo "Application version: ${params.appVersion}"
                 }
             }
         }
+        stage('Init'){
+            steps{
+                sh """
+                    cd terraform
+                    terraform init
+                """
+            }
+        }
+        stage('plan'){
+            steps{
+                sh """
+                    cd terraform
+                    terraform plan -var="app_Version=${params.appVersion}"
+                """
+            }
+        }
+        // stage('Deploy'){
+        //     steps{
+        //         sh """
+        //             cd terraform
+        //             terraform plan
+        //         """
+        //     }
+        // }
+
     }
     post {
         always {
