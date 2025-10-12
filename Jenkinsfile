@@ -35,8 +35,9 @@ pipeline {
         stage('plan'){
             steps{
                 sh """
+                    pwd
                     cd terraform
-                    terraform plan -var="app_Version=${params.appVersion}"
+                    terraform plan -var="app_version=${params.appVersion}"
                 """
             }
         }
@@ -44,7 +45,7 @@ pipeline {
         //     steps{
         //         sh """
         //             cd terraform
-        //             terraform plan
+        //             terraform apply -auto-approve -var="app_version=${params.appVersion}"
         //         """
         //     }
         // }
