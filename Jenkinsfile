@@ -9,7 +9,6 @@ pipeline {
     }
     parameters {
         string(name: 'appVersion', defaultValue: '1.0.0', description: 'what is the application version?')
-        choice(name: 'action', choices:['Apply','Destroy'], description: 'pick something')
     }
     environment {
         def appVersion = '' //declaring global variable
@@ -34,11 +33,6 @@ pipeline {
             }
         }
         stage('plan'){
-            when {
-                expression {
-                    params.action == 'Apply'
-                }
-            }
             steps{
                 sh """
                     pwd
@@ -48,32 +42,10 @@ pipeline {
             }
         }
         stage('Deploy'){
-            when {
-                expression {
-                    params.action == 'Apply'
-                }
-            }
-            input {
-                message "Should we continue?"
-                ok "Yes, we should"
-            }
             steps{
                 sh """
                     cd terraform
                     terraform apply -auto-approve -var="app_version=${params.appVersion}"
-                """
-            }
-        }
-        stage('Destroy'){
-            when {
-                expression {
-                    params.action == 'Destroy'
-                }
-            }
-            steps{
-                sh """
-                    cd terraform
-                    terraform destroy -auto-approve -var="app_version=${params.appVersion}"
                 """
             }
         }
